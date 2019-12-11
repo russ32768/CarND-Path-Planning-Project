@@ -92,6 +92,7 @@ uWS::OpCode opCode) {
           //   of the road.
           	auto sensor_fusion = j[1]["sensor_fusion"];
 
+            json msgJson;
             int prev_size = previous_path_x.size();
 
             if (prev_size > 0) {
@@ -100,7 +101,7 @@ uWS::OpCode opCode) {
 
             bool car_ahead = false;
             bool car_left = false;
-            bool car_righ = false;
+            bool car_right = false;
 
             for ( int i = 0; i < sensor_fusion.size(); i++ ) 
             {
@@ -143,7 +144,7 @@ uWS::OpCode opCode) {
                 } 
                 else if ( car_lane - lane == 1 ) 
                 {
-                  car_righ |= car_s - check_dist + check_offset <= check_car_s && car_s + check_dist >= check_car_s;
+                  car_right |= car_s - check_dist + check_offset <= check_car_s && car_s + check_dist >= check_car_s;
                 }
             }
 
@@ -157,7 +158,7 @@ uWS::OpCode opCode) {
               {
                 lane = lane -1 ; 
               } 
-              else if ( !car_righ && lane != 2 )
+              else if ( !car_right && lane != 2 )
               {
                 lane = lane + 1; 
               } 
@@ -169,7 +170,8 @@ uWS::OpCode opCode) {
             else 
              {
               if ( lane != 1 ) 
-                if ( ( lane == 0 && !car_righ ) || ( lane == 2 && !car_left ) ) 
+              { 
+                if ( ( lane == 0 && !car_right ) || ( lane == 2 && !car_left ) ) 
                 {
                   lane = 1; 
                 }
@@ -285,7 +287,7 @@ uWS::OpCode opCode) {
               next_y_vals.push_back(y_point);
             }
 
-            json msgJson;
+
 
           	msgJson["next_x"] = next_x_vals;
           	msgJson["next_y"] = next_y_vals;
